@@ -1,6 +1,4 @@
-﻿using GlobalTikectAdminMobile.Views;
-
-namespace GlobalTikectAdminMobile
+﻿namespace GlobalTikectAdminMobile
 {
     public partial class App : Application
     {
@@ -8,7 +6,7 @@ namespace GlobalTikectAdminMobile
         {
             InitializeComponent();
 
-            MainPage = new EventOverviewPage();
+            MainPage = new AppShell();
         }
     }
 }

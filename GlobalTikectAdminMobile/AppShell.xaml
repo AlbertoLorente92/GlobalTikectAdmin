@@ -4,12 +4,13 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:GlobalTikectAdminMobile"
+    xmlns:views="clr-namespace:GlobalTikectAdminMobile.Views"
     Shell.FlyoutBehavior="Disabled"
     Title="GlobalTikectAdminMobile">
 
     <ShellContent
         Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
+        ContentTemplate="{DataTemplate views:EventOverviewPage}"
         Route="MainPage" />
 
 </Shell>

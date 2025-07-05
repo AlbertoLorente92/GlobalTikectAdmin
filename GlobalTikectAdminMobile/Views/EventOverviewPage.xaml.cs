@@ -4,9 +4,9 @@ namespace GlobalTikectAdminMobile.Views;
 
 public partial class EventOverviewPage : ContentPage
 {
-	public EventOverviewPage()
+	public EventOverviewPage(EventListOverviewViewModel vm)
 	{
 		InitializeComponent();
-		BindingContext = new EventListOverviewViewModel();
+		BindingContext = vm;
     }
 }
