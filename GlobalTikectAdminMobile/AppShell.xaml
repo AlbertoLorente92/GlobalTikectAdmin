@@ -11,6 +11,6 @@
     <ShellContent
         Title="Home"
         ContentTemplate="{DataTemplate views:EventOverviewPage}"
-        Route="MainPage" />
+        Route="overview" />
 
 </Shell>

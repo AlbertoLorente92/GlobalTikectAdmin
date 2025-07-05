@@ -1,13 +1,16 @@
 ﻿using CommunityToolkit.Maui.Core.Extensions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
+using GlobalTikectAdminMobile.Messages;
 using GlobalTikectAdminMobile.Models;
 using GlobalTikectAdminMobile.Services;
+using GlobalTikectAdminMobile.ViewModels.Base;
 using System.Collections.ObjectModel;
 
 namespace GlobalTikectAdminMobile.ViewModels
 {
-    public partial class EventDetailViewModel : ObservableObject
+    public partial class EventDetailViewModel : ViewModelBase, IQueryAttributable
     {
         [ObservableProperty]
         private Guid _id;
@@ -41,6 +44,7 @@ namespace GlobalTikectAdminMobile.ViewModels
             if(await _eventService.UpdateStatus(Id, EventStatusModel.Cancelled ))
             {
                 EventStatus = EventStatusEnum.Cancelled;
+                WeakReferenceMessenger.Default.Send(new StatusChangedMessage(Id, EventStatus));
             }
         }
 
@@ -51,14 +55,22 @@ namespace GlobalTikectAdminMobile.ViewModels
         public EventDetailViewModel(IEventService eventService)
         {
             _eventService = eventService;
-            Id = Guid.Parse("EE272F8B-6096-4CB6-8625-BB4BB2D89E8B");
-            GetEvent(Id);
         }
 
-        private async void GetEvent(Guid id)
+        public override async Task LoadAsync()
+        {
+            await Loading(async () =>
+            {
+                if (Id != Guid.Empty)
+                {
+                    await GetEvent(Id);
+                }
+            });
+        }
+
+        private async Task GetEvent(Guid id)
         {
             var @event = await _eventService.GetEventAsync(id);
-
             MapEventData(@event);
         }
 
@@ -77,6 +89,15 @@ namespace GlobalTikectAdminMobile.ViewModels
                 Id = @event.Category.Id,
                 Name = @event.Category.Name
             };
+        }
+
+        void IQueryAttributable.ApplyQueryAttributes(IDictionary<string, object> query)
+        {
+            var eventId = query["EventId"].ToString();
+            if (Guid.TryParse(eventId, out var selectedId))
+            {
+                Id = selectedId;
+            }
         }
     }
 }

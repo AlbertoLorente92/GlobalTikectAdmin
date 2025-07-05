@@ -37,7 +37,8 @@ namespace GlobalTikectAdminMobile
 
         private static MauiAppBuilder RegisterRepositories(this MauiAppBuilder builder)
         {
-            builder.Services.AddSingleton<IEventRepository, EventRepository>();
+            builder.Services.AddTransient<IEventRepository, EventRepository>();
+            builder.Services.AddSingleton<INavigationService, NavigationService>();
             return builder;
         }
 

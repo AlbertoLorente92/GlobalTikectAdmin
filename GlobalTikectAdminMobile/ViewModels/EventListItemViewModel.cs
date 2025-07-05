@@ -1,8 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
+using GlobalTikectAdminMobile.Messages;
 
 namespace GlobalTikectAdminMobile.ViewModels
 {
-    public partial class EventListItemViewModel : ObservableObject
+    public partial class EventListItemViewModel : ObservableObject, IRecipient<StatusChangedMessage>
     {
         [ObservableProperty]
         private Guid _id;
@@ -46,6 +48,16 @@ namespace GlobalTikectAdminMobile.ViewModels
             _artists = artists;
             _eventStatus = status;
             _category = category;
+
+            WeakReferenceMessenger.Default.Register<StatusChangedMessage>(this);
+        }
+
+        public void Receive(StatusChangedMessage message)
+        {
+            if (message.EventId == Id)
+            {
+                EventStatus = message.Status;
+            }
         }
     }
 }

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+<views:ContentPageBase xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="GlobalTikectAdminMobile.Views.EventOverviewPage"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             xmlns:views="clr-namespace:GlobalTikectAdminMobile.Views"
              xmlns:converters="clr-namespace:GlobalTikectAdminMobile.Converters"
              Title="EventOverviewPage">
     <ContentPage.Resources>
@@ -33,6 +34,7 @@
                         ItemsSource="{Binding Events}"
                         SelectedItem="{Binding SelectedEvent, Mode=TwoWay}"
                         SelectionMode="Single"
+                        SelectionChangedCommand="{Binding NavigateToSelectedDetailCommand}"
                         >
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
@@ -69,5 +71,9 @@
                 </StackLayout>
             </Grid>
         </ScrollView>
+        <Grid  BackgroundColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray500}}" 
+       IsVisible="{Binding IsLoading}">
+            <ActivityIndicator IsRunning="{Binding IsLoading}" />
+        </Grid>
     </Grid>
-</ContentPage>
+</views:ContentPageBase>
