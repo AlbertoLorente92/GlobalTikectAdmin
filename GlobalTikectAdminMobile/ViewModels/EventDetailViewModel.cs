@@ -115,7 +115,10 @@ namespace GlobalTikectAdminMobile.ViewModels
         private async Task GetEvent(Guid id)
         {
             var @event = await _eventService.GetEventAsync(id);
-            MapEventData(@event);
+            if (@event != null)
+            {
+                MapEventData(@event);
+            }
         }
 
         private void MapEventData(EventModel @event)
