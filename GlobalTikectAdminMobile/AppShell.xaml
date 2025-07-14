@@ -8,6 +8,10 @@
     Shell.FlyoutBehavior="Disabled"
     Title="GlobalTikectAdminMobile">
 
+    <Shell.TitleView>
+        <views:LogoView />
+    </Shell.TitleView>
+    
     <ShellContent
         Title="Home"
         ContentTemplate="{DataTemplate views:EventOverviewPage}"

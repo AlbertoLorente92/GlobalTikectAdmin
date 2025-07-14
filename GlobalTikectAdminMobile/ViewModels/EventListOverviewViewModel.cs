@@ -1,14 +1,17 @@
 ﻿using CommunityToolkit.Maui.Core.Extensions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
+using GlobalTikectAdminMobile.Messages;
 using GlobalTikectAdminMobile.Models;
 using GlobalTikectAdminMobile.Services;
 using GlobalTikectAdminMobile.ViewModels.Base;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 
 namespace GlobalTikectAdminMobile.ViewModels
 {
-    public partial class EventListOverviewViewModel : ViewModelBase
+    public partial class EventListOverviewViewModel : ViewModelBase, IRecipient<EventAddedOrChangedMessage>, IRecipient<EventDeletedMessage>
     {
         [ObservableProperty]
         private ObservableCollection<EventListItemViewModel> _events = new();
@@ -23,6 +26,9 @@ namespace GlobalTikectAdminMobile.ViewModels
         {
             _eventService = eventService;
             _navigationService = navigationService;
+
+            WeakReferenceMessenger.Default.Register<EventAddedOrChangedMessage>(this);
+            WeakReferenceMessenger.Default.Register<EventDeletedMessage>(this);
         }
 
         [RelayCommand]
@@ -33,6 +39,12 @@ namespace GlobalTikectAdminMobile.ViewModels
                 await _navigationService.GoToEventDetail(SelectedEvent.Id);
                 SelectedEvent = null;
             }
+        }
+
+        [RelayCommand]
+        private async Task NavigateToAddEvent()
+        {
+            await _navigationService.GoToAddEvent();
         }
 
         public override async Task LoadAsync()
@@ -73,6 +85,27 @@ namespace GlobalTikectAdminMobile.ViewModels
                 (EventStatusEnum)@event.Status,
                 @event.ImageUrl,
                 category);
+        }
+
+        public async Task Receive(EventAddedOrChangedMessage message)
+        {
+            Events.Clear();
+            await GetEvents();
+        }
+
+        void IRecipient<EventAddedOrChangedMessage>.Receive(EventAddedOrChangedMessage message)
+        {
+            Events.Clear();
+            Task.Run(async () => await GetEvents());
+        }
+
+        public void Receive(EventDeletedMessage message)
+        {
+            var deletedEvent = Events.FirstOrDefault(e => e.Id == message.EventId);
+            if (deletedEvent is not null)
+            {
+                Events.Remove(deletedEvent);
+            }
         }
     }
 }

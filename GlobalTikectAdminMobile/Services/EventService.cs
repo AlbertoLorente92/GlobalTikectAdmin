@@ -10,6 +10,16 @@ namespace GlobalTikectAdminMobile.Services
         {
             _eventRepository = eventRepository;
         }
+
+        public Task<bool> CreateEvent(EventModel model)
+            => _eventRepository.CreateEvent(model);
+
+        public Task<bool> DeleteEvent(Guid id)
+         => _eventRepository.DeleteEvent(id);
+
+        public Task<bool> EditEvent(EventModel model)
+            => _eventRepository.EditEvent(model);
+
         public Task<EventModel?> GetEventAsync(Guid id) 
             => _eventRepository.GetEventAsync(id);
 

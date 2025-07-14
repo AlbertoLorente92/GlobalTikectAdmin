@@ -30,6 +30,11 @@
         <ScrollView>
             <Grid>
                 <StackLayout>
+                    <Button 
+                        Margin="5"
+                        Command="{Binding NavigateToAddEventCommand}"
+                        HorizontalOptions="Fill"
+                        Text="Add event" />
                     <CollectionView 
                         ItemsSource="{Binding Events}"
                         SelectedItem="{Binding SelectedEvent, Mode=TwoWay}"
